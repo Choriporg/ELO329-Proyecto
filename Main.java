@@ -2,21 +2,51 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 public class Main {
+    public static Scanner inputInteger;
+    public static Scanner inputString;
+    private ArrayList<Mesero> meseros;
+    private ArrayList<Mesa> mesas;
+    private ArrayList<Carta> menu;
     public static void main(String[] args){
         //Inicialización de la aplicación
 
         //Scanner para ingreso de datos
         //Hay dos, para evitar problemas al leer datos de diferentes tipos
-        Scanner inputInteger = new Scanner(System.in);
-        Scanner inputString = new Scanner(System.in);
+        inputInteger = new Scanner(System.in);
+        inputString = new Scanner(System.in);
 
-
-        ArrayList<Mesero> meseros = new ArrayList<Mesero>();
-        ArrayList<Mesa> mesas = new ArrayList<Mesa>();
+        //Creación de una instancia de ejecución de la aplicación.
+        Main instancia = new Main();
 
         System.out.println("-----------------------------------------");
         System.out.println(">> Bienvenido a la aplicación de pedidos");
         System.out.println("-----------------------------------------");
+        System.out.println(">> Iniciando configuraciones iniciales:");
+        instancia.Inicialización();
+        System.out.println(">> Configuración inicial exitosa");
+
+        //Menu de interaccion con el usuario
+
+        //PENDIENTE POR HACER EL MANEJO DE MESAS Y PEDIDOS.
+
+        boolean continuar = true;
+        while(continuar){
+            System.out.println("\n>> Seleccione una opción:");
+            System.out.println("\t\t>> (1) Ingresar mesa");
+            System.out.println("\t\t>> (2) Ingresar Pedido");
+            System.out.println("\t\t>> (3) Completar Pedido");
+            System.out.println("\t\t>> (4) Salir");
+        }
+        
+    }
+
+    //Inicia la ejecución de la instancia de ejecución creando el arreglo de los meseros y la carta.
+    public void Inicialización(){
+        inputInteger = new Scanner(System.in);
+        inputString = new Scanner(System.in);
+        meseros = new ArrayList<Mesero>();
+        menu = new ArrayList<Carta>();
+
         System.out.println("\t>> ¿Cuántos meseros trabajan en el restaurante?");
         int cantidadMeseros = inputInteger.nextInt();
 
@@ -37,14 +67,10 @@ public class Main {
         }
 
         System.out.println("\n\t>> Meseros ingresados correctamente");
+        System.out.println("-----------------------------------------");
 
-        //Inicialización de la carta
-        ArrayList<Carta> menu = new ArrayList<Carta>();
-
+        //Llenado de la carta
         boolean flagCartaCompleta = true;
-
-        //DA ERROR A PARTIR DE LA SEGUNDA ITERACIÓN CON EL SCANNER.
-
         while(flagCartaCompleta){
 
             //Elección de tipo de item que se agregará a la carta
@@ -54,7 +80,7 @@ public class Main {
             System.out.println("\t\t3. Plato de fondo");
             System.out.println("\t\t4. Postre");
             System.out.println("\t\t5. Ingreso completo de la carta");
-
+            
             int eleccionItem = inputInteger.nextInt();
 
             //Caso en el que se ingresa un bebestible
@@ -109,9 +135,16 @@ public class Main {
             } else{
                 System.out.println("\n\t>> Ingrese una opción válida, por favor ingrese un número entre 1 y 4");
             }
-
+            
+            System.out.println("-----------------------------------------");
         }
-
         System.out.println("\n\t>> Carta ingresada correctamente");
+    }
+
+    public void mostrarMenu(){
+        System.out.println("\n\t>> Mostrando la carta.")
+        for(int i = 0; i < menu.size(); i ++){
+            menu.get(i).imprimirItem();
+        }
     }
 }

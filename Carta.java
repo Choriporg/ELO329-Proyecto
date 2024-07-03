@@ -11,6 +11,7 @@ public abstract class Carta {
 
     //Metodos
     public abstract void ingresarItem();
+    public abstract void imprimirItem();
 
     //Constructor
     public Carta(int codigoItem, int precioItem, String nombreItem){

@@ -21,7 +21,20 @@ public class Entradas extends Carta{
         }
         System.out.println(">> Ingrese el tipo de entrada");
         tipoEntrada = scn.nextLine();
-        scn.close();
+    }
+
+    public void imprimirItem(){
+        System.out.println("\n\t\t>> Nombre del plato de entrada: " + nombreItem);
+        System.out.println("\t\t>> Codigo del plato de entrada: " + codigoItem);
+        System.out.println("\t\t>> Precio del plato de entrada: " + precioItem);
+        System.out.println("\t\t>> Tipo de entrada: " + tipoEntrada);
+        
+        //Verificar si es un plato vegetariano
+        if(aptoVegetarianos){
+            System.out.println("\t\t>> Es un plato vegetariano");
+        }else{
+            System.out.println("\t\t>> No es un plato vegetariano");
+        }
     }
 
     //Constructor

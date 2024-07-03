@@ -22,7 +22,21 @@ public class PlatoFondo extends Carta{
             System.out.println(">> Ingrese el ingrediente especial " + (i + 1));
             ingredientesEspeciales.add(scn.nextLine());
         }
-        scn.close();
+    }
+
+    public void imprimirItem(){
+        System.out.println("\n\t\t>> Nombre del plato de fondo: " + nombreItem);
+        System.out.println("\t\t>> Codigo del plato de fondo: " + codigoItem);
+        System.out.println("\t\t>> Precio del plato de fonfo: " + precioItem);
+        System.out.println("\t\t>> Tipo de plato de fondo: " + tipoPlatoFondo);
+        System.out.println("\t\t>> Descripción del plato:");
+        System.out.println("\t\t\t>>> " + descripcion);
+        System.out.println("\t\t>> Ingredientes especiales:");
+
+        for(int i = 0; i < ingredientesEspeciales.size(); i++){
+            System.out.println("\t\t>>> Ingrediente especial " + i + 1 +": " + ingredientesEspeciales.get(i));
+        }
+
     }
 
     //Constructor

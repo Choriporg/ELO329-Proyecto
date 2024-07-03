@@ -52,6 +52,8 @@ public class Pedido {
     public int getNumeroPedido(){ return numeroPedido; }
     
     //Constructor
+
+    //El pedido se crea al momento de crear la mesa
     public Pedido(int numeroPedido){
         this.numeroPedido = numeroPedido;
         productosPedidos = new ArrayList<Carta>();
