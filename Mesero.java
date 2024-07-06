@@ -18,11 +18,17 @@ public class Mesero {
     }
 
     public void imprimirMesero(){
-        System.out.println("Nombre del mesero: " + nombreMesero + "; Codigo del mesero: " + codigoMesero + "; Propinas acumuladas: " + propinasAcumuladas);
+        System.out.println("\n\t\t>> Nombre del mesero: " + nombreMesero + "; Codigo del mesero: " + codigoMesero + "; Propinas acumuladas: " + propinasAcumuladas);
+    }
+
+    public void imprimirMesasAtendidas(){
+        for(int i = 0; i < mesasAtendidas.size(); i++){
+            System.out.println("------------------------------");
+            System.err.println("Número de mesa: " + mesasAtendidas.get(i).getNumeroMesa());
+        }
     }
 
     //Getters
-
     public int getCodigoMesero(){ return codigoMesero;}
     public int getPropinasAcumuladas(){ return propinasAcumuladas;}
     public ArrayList<Mesa> getMesasAtendidas(){return mesasAtendidas;}

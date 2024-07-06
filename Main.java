@@ -17,6 +17,7 @@ public class Main {
 
         //Creación de una instancia de ejecución de la aplicación.
         Main instancia = new Main();
+        instancia.mesas = new ArrayList<Mesa>();
 
         System.out.println("-----------------------------------------");
         System.out.println(">> Bienvenido a la aplicación de pedidos");
@@ -30,16 +31,109 @@ public class Main {
         //PENDIENTE POR HACER EL MANEJO DE MESAS Y PEDIDOS.
 
         boolean continuar = true;
+        int numeroMesa = 1;
+        int numeroPedido = 0;
+
         while(continuar){
+            System.out.println("-----------------------------------------");
             System.out.println("\n>> Seleccione una opción:");
             System.out.println("\t\t>> (1) Ingresar mesa");
             System.out.println("\t\t>> (2) Ingresar Pedido");
             System.out.println("\t\t>> (3) Completar Pedido");
             System.out.println("\t\t>> (4) Salir");
-        }
-        
-    }
 
+            int accion = inputInteger.nextInt();
+            
+            //Caso en el que se selecciona ingresar una mesa.
+            if(accion == 1){
+                Mesa nuevaMesa = new Mesa(numeroMesa, numeroPedido);
+                instancia.mesas.add(nuevaMesa);
+                
+                System.out.println("\t\t>> Codigo del mesero: ");
+                int codigoIngresado = inputInteger.nextInt();
+
+                int i = 0;
+                boolean meseroEncontrado = false;
+                //Obtener el mesero que está atendiendo la mesa
+                while(i < instancia.meseros.size() && meseroEncontrado == false){
+                    if(instancia.meseros.get(i).getCodigoMesero() == codigoIngresado){
+                        meseroEncontrado = true;
+                    }else{
+                        i++;
+                    }
+                }
+                numeroMesa++;
+                numeroPedido++;
+                //Verificación si se encontró el mesero
+                if(meseroEncontrado == false){
+                    System.out.println(">> No se encontró al mesero ingresado, ingrese un codigo válido.");
+                }else{
+                    instancia.meseros.get(i).ingresarMesa(nuevaMesa);
+                }
+            //Caso en el que ingresan productos al pedido
+            }else if (accion == 2){
+                instancia.mostrarMenu();
+
+                System.out.println("\t\t>> Ingrese el codigo del producto: ");
+                int codigoProducto = inputInteger.nextInt();
+
+                System.out.println("\t\t>> Ingresa la mesa atendida: ");
+                int mesaAtendida = inputInteger.nextInt();
+
+                //Buscar item en la carta
+                int i = 0;
+                boolean itemEncontrado = false;
+                while(i < instancia.menu.size() && itemEncontrado == false){
+                    if(instancia.menu.get(i).getCodigoItem() == codigoProducto){
+                        itemEncontrado = true;
+                    }else{
+                        i++;
+                    }
+                }
+                //La mesa y el producto existen
+                if(mesaAtendida < instancia.mesas.size() && itemEncontrado){
+                    instancia.mesas.get(i).getOrden().agregarItemPedido(instancia.menu.get(i));
+                }
+
+            //Completar pedido
+            } else if(accion == 3){
+                System.out.println("------------------------------------");
+                for(int index = 0; index < instancia.meseros.size(); index++){
+                    instancia.meseros.get(index).imprimirMesero();
+                    instancia.meseros.get(index).imprimirMesasAtendidas();
+                }
+                System.out.println(">> Ingrese codigo de mesero: ");
+                int codMesero = inputInteger.nextInt();
+
+                System.out.println(">> Ingrese la mesa que se está cerrando: ");
+                int mesaCompletada = inputInteger.nextInt();
+                
+                //Busqueda mesero
+                int i = 0;
+                boolean meseroEncontrado = false;
+                while(i < instancia.meseros.size() && meseroEncontrado == false){
+                    if(instancia.meseros.get(i).getCodigoMesero() == codMesero){
+                        meseroEncontrado = true;
+                    }else{
+                        i++;
+                    }
+                }
+                //El mesero existe
+                if(meseroEncontrado){
+                    Pedido pedidoCompletado = instancia.meseros.get(i).getMesasAtendidas().get(mesaCompletada).getOrden();
+                    instancia.meseros.get(i).actualizarPropinas(pedidoCompletado.getPropinaSugerida());
+                    
+                    //Eliminación de la mesa en la lista del mesero y vaciado de la mesa.
+                    instancia.meseros.get(i).getMesasAtendidas().remove(mesaCompletada);
+                }
+
+            //Salir
+            }else if(accion == 4){
+                continuar = false;
+            }
+        
+        }
+    }
     //Inicia la ejecución de la instancia de ejecución creando el arreglo de los meseros y la carta.
     public void Inicialización(){
         inputInteger = new Scanner(System.in);
@@ -50,7 +144,6 @@ public class Main {
         System.out.println("\t>> ¿Cuántos meseros trabajan en el restaurante?");
         int cantidadMeseros = inputInteger.nextInt();
 
-
         for(int i = 0; i < cantidadMeseros; i++){
             System.out.println("\n\t>> Ingrese el nombre del mesero " + (i + 1));
             String nombreMesero = inputString.nextLine();
@@ -59,7 +152,6 @@ public class Main {
             int codigoMesero = inputInteger.nextInt();
             mesero.setCodigoMesero(codigoMesero);
             meseros.add(mesero);
-
         }
 
         for(int i = 0; i < cantidadMeseros; i++){
@@ -141,10 +233,13 @@ public class Main {
         System.out.println("\n\t>> Carta ingresada correctamente");
     }
 
+    //Imprimir el menu
     public void mostrarMenu(){
-        System.out.println("\n\t>> Mostrando la carta.")
+        System.out.println("\n\t>> Mostrando la carta.");
         for(int i = 0; i < menu.size(); i ++){
+            System.out.println("-----------------------------------------");
             menu.get(i).imprimirItem();
+            System.out.println("-----------------------------------------");
         }
     }
 }
