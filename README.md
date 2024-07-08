@@ -4,7 +4,7 @@ Este proyecto consiste en una aplicación que permita manejar el funcionamiento 
 
 Integrantes::
 
-- Vicente Moya 🔰- [@R4skolnikov] (https://github.com/r4skolnikov)
+- Vicente Moya 🔰- [@R4skolnikov](https://github.com/r4skolnikov)
 - Nicolas Vergara ⛄- [@Nmauri](https://github.com/Nmaurii)
 - Ignacio González 👾 - [@Choriporg](https://github.com/Choriporg)
-- Eduardo Palma 🗻 - [@Adreoud[(https://github.com/adreoud)
+- Eduardo Palma 🗻 - [@Adreoud](https://github.com/adreoud)
