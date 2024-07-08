@@ -1,6 +1,5 @@
 public abstract class Carta {
     //Atributos
-    protected int codigoItem;
     protected int precioItem;
     protected String nombreItem;
     protected int id;
@@ -9,7 +8,7 @@ public abstract class Carta {
 
     //Getters
     public int getPrecioItem(){ return precioItem; }
-    public int getCodigoItem(){ return codigoItem; }
+    public int getCodigoItem(){ return id; }
     public String getNombreItem(){ return nombreItem; }
 
     //Metodos
