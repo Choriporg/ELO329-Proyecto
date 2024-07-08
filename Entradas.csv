@@ -1,0 +1,6 @@
+codigoItem,precioItem,nombreItem,tipoEntrada,aptoVegetarianos,cantidad
+1,1500,Ensalada Cesar,Ensalada,true,30
+2,1200,Bruschetta,Entrante,true,25
+3,1800,Calamares a la Romana,Mariscos,false,15
+4,1400,Sopa de Tomate,Sopa,true,20
+5,2000,Alitas de Pollo,Entrante,false,40

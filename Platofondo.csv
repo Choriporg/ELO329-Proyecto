@@ -1,0 +1,7 @@
+codigoItem,precioItem,nombreItem,descripcion,tipoPlatoFondo,cantidad
+1,2500,Spaghetti Carbonara,Spaghetti con salsa cremosa de huevo y panceta,Pasta,20
+2,3000,Paella Valenciana,Arroz con mariscos pollo y verduras,Arroz,15
+3,3500,Lasagna Bolognesa,Lasaña con carne molida y salsa bechamel,Pasta,10
+4,2800,Enchiladas de Pollo,Tortillas rellenas de pollo con salsa roja,Mexicana,25
+5,3200,Curry de Verduras,Guiso de verduras con salsa de curry,Vegetariano,12
+6,2900,Filete a la Parrilla,Filete de res a la parrilla con guarniciones,Carne,18

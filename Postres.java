@@ -6,17 +6,9 @@ public class Postres extends Carta{
     private String descripcion;
 
     //Metodos
-    public void ingresarItem(){
-        System.out.println(">> Ingrese el tipo de postre");
-        Scanner scn = new Scanner(System.in);
-        tipoPostre = scn.nextLine();
-        System.out.println(">> Ingrese una descripción del postre");
-        descripcion = scn.nextLine();
-    }
-
     public void imprimirItem(){
         System.out.println("\n\t\t>> Nombre del postre: " + nombreItem);
-        System.out.println("\t\t>> Codigo del postre: " + codigoItem);
+        System.out.println("\t\t>> Codigo del postre: " + id);
         System.out.println("\t\t>> Precio del postre: " + precioItem);
         System.out.println("\t\t>> Tipo de postre: " + tipoPostre);
         System.out.println("\t\t>> Descripción: ");
@@ -27,8 +19,10 @@ public class Postres extends Carta{
     public String getDescripcion(){ return descripcion; }
 
     //Constructor
-    public Postres(int codigoItem, int precioItem, String nombreItem){
-        super(codigoItem, precioItem, nombreItem);
-        ingresarItem();
+    public Postres(int precioItem, String nombreItem, String tipoPostre, String descripcion){
+        super(precioItem, nombreItem);
+        this.tipoPostre = tipoPostre;
+        this.descripcion = descripcion;
+
     }
 }

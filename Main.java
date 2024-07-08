@@ -1,5 +1,8 @@
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class Main {
     public static Scanner inputInteger;
@@ -24,11 +27,9 @@ public class Main {
         System.out.println("-----------------------------------------");
         System.out.println(">> Iniciando configuraciones iniciales:");
         instancia.Inicialización();
-        System.out.println(">> Configuración inicial exitosa");
+        System.out.println("\n>> Configuración inicial exitosa");
 
         //Menu de interaccion con el usuario
-
-        //PENDIENTE POR HACER EL MANEJO DE MESAS Y PEDIDOS.
 
         boolean continuar = true;
         int numeroMesa = 1;
@@ -118,6 +119,8 @@ public class Main {
                         i++;
                     }
                 }
+
+                System.out.println("Salida while: " + meseroEncontrado + " i: " + i);
                 //El mesero existe
                 if(meseroEncontrado){
                     Pedido pedidoCompletado = instancia.meseros.get(i).getMesasAtendidas().get(mesaCompletada).getOrden();
@@ -129,6 +132,10 @@ public class Main {
 
             //Salir
             }else if(accion == 4){
+                for(int i = 0; i < instancia.meseros.size(); i++){
+                    instancia.meseros.get(i).imprimirMesero();
+                }
+
                 continuar = false;
             }
         
@@ -162,75 +169,130 @@ public class Main {
         System.out.println("-----------------------------------------");
 
         //Llenado de la carta
-        boolean flagCartaCompleta = true;
-        while(flagCartaCompleta){
 
-            //Elección de tipo de item que se agregará a la carta
-            System.out.println("\n\t>> ¿Qué tipo de item desea ingresar?");
-            System.out.println("\t\t1. Bebestible");
-            System.out.println("\t\t2. Entrada");
-            System.out.println("\t\t3. Plato de fondo");
-            System.out.println("\t\t4. Postre");
-            System.out.println("\t\t5. Ingreso completo de la carta");
+        leeBebestibles("Bebestibles.csv");
+        leeEntradas("Entradas.csv");
+        leePlatofondo("Platofondo.csv");
+        leerPostre("Postres.csv");
             
-            int eleccionItem = inputInteger.nextInt();
-
-            //Caso en el que se ingresa un bebestible
-            if(eleccionItem == 1){
-                System.out.println("\n\t>> Ingrese el nombre del bebestible");
-                String nombreItem = inputString.nextLine();
-                System.out.println("\t>> Ingrese el precio del bebestible");
-                int precioItem = inputInteger.nextInt();
-                System.out.println("\t>> Ingrese el código del bebestible");
-                int codigoItem = inputInteger.nextInt();
-                Carta bebestible = new Bebestibles(codigoItem, precioItem, nombreItem);
-                menu.add(bebestible);
-
-            //Caso en el que se ingresa un plato de entrada
-            }else if(eleccionItem == 2){
-                System.out.println("\n\t>> Ingrese el nombre de la entrada");
-                String nombreItem = inputString.nextLine();
-                System.out.println("\t>> Ingrese el precio de la entrada");
-                int precioItem = inputInteger.nextInt();
-                System.out.println("\t>> Ingrese el código de la entrada");
-                int codigoItem = inputInteger.nextInt();
-                Carta entrada = new Entradas(codigoItem, precioItem, nombreItem);
-                menu.add(entrada);
-
-            //Caso en el que se ingresa un plato de fondo
-            } else if(eleccionItem == 3){
-                System.out.println("\n\t>> Ingrese el nombre del plato de fondo");
-                String nombreItem = inputString.nextLine();
-                System.out.println("\t>> Ingrese el precio del plato de fondo");
-                int precioItem = inputInteger.nextInt();
-                System.out.println("\t>> Ingrese el código del plato de fondo");
-                int codigoItem = inputInteger.nextInt();
-                Carta platoFondo = new PlatoFondo(codigoItem, precioItem, nombreItem);
-                menu.add(platoFondo);
-
-            //Caso en el que se ingresa un postre
-            }else if(eleccionItem == 4){
-                System.out.println("\n\t>> Ingrese el nombre del postre");
-                String nombreItem = inputString.nextLine();
-                System.out.println("\t>> Ingrese el precio del postre");
-                int precioItem = inputInteger.nextInt();
-                System.out.println("\t>> Ingrese el código del postre");
-                int codigoItem = inputInteger.nextInt();
-                Carta postre = new Postres(codigoItem, precioItem, nombreItem);
-                menu.add(postre);
-
-            //Caso en el que se termina de ingresar la carta
-            }else if(eleccionItem == 5){
-                flagCartaCompleta = false;
-
-            //Caso en el que no hay una entrada válida
-            } else{
-                System.out.println("\n\t>> Ingrese una opción válida, por favor ingrese un número entre 1 y 4");
-            }
-            
-            System.out.println("-----------------------------------------");
-        }
+        System.out.println("-----------------------------------------");
+        
         System.out.println("\n\t>> Carta ingresada correctamente");
+    }
+
+
+    //Leer archivo de configuracion bebestibles
+    public void leeBebestibles(String archivoCSV) {
+        String linea;
+        try (BufferedReader br = new BufferedReader(new FileReader(archivoCSV))) {
+            // Leer la primera línea (cabecera)
+            linea = br.readLine();
+
+            // Leer el resto del archivo
+            while ((linea = br.readLine()) != null) {
+                String[] datos = linea.split(",");
+                int precioItem = Integer.parseInt(datos[1]);
+                String nombreItem = datos[2];
+                boolean tieneAlcohol = Boolean.parseBoolean(datos[3]);
+                String descripcion = datos[4];
+
+                // Crear un objeto Bebestibles y agregarlo al menu
+                Carta bebestible = new Bebestibles(precioItem, nombreItem, tieneAlcohol, descripcion);
+                menu.add(bebestible);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //Leer archivo de configuracion postres
+    public void leerPostre(String archivoCSV) {
+        String linea;
+        try (BufferedReader br = new BufferedReader(new FileReader(archivoCSV))) {
+            // Leer la primera línea (cabecera)
+            linea = br.readLine();
+
+            // Leer el resto del archivo
+            while ((linea = br.readLine()) != null) {
+                String[] datos = linea.split(",");
+                int precioItem = Integer.parseInt(datos[1]);
+                String nombreItem = datos[2];
+                String tipoPostre = datos[3];
+                String descripcion = datos[4];
+
+                // Crear un objeto Postre y agregarlo al menu
+                Carta postre = new Postres(precioItem, nombreItem, tipoPostre, descripcion);
+                menu.add(postre);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //Leer archivo de configuracion entradas
+    public void leeEntradas(String archivoCSV) {
+        String linea;
+        try (BufferedReader br = new BufferedReader(new FileReader(archivoCSV))) {
+            linea = br.readLine(); // Leer la primera línea (cabecera)
+
+            while ((linea = br.readLine()) != null) {
+                String[] datos = linea.split(",");
+                int codigoItem = Integer.parseInt(datos[0]);
+                int precioItem = Integer.parseInt(datos[1]);
+                String nombreItem = datos[2];
+                String tipoEntrada = datos[3];
+                boolean aptoVegetarianos = Boolean.parseBoolean(datos[4]);
+
+
+                Carta entrada = new Entradas(precioItem, nombreItem, tipoEntrada, aptoVegetarianos);
+                menu.add(entrada);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //Leer archivo de configuracion platos de fondo
+    public void leePlatofondo(String archivoCSV) {
+        String linea;
+        try (BufferedReader br = new BufferedReader(new FileReader(archivoCSV))) {
+            linea = br.readLine(); // Leer la primera línea (cabecera)
+
+            // Leer el resto del archivo
+            while ((linea = br.readLine()) != null) {
+                // Ignorar líneas vacías
+                if (linea.trim().isEmpty()) {
+                    continue;
+                }
+
+                String[] datos = linea.split(",");
+                if (datos.length < 6) {
+                    // Si faltan columnas, continuar con la siguiente línea
+                    System.err.println("Línea ignorada por falta de datos: " + linea);
+                    continue;
+                }
+
+                try {
+                    int codigoItem = Integer.parseInt(datos[0].trim());
+                    int precioItem = Integer.parseInt(datos[1].trim());
+                    String nombreItem = datos[2].trim();
+                    String descripcion = datos[3].trim();
+                    String tipoPlatoFondo = datos[4].trim();
+                    int cantidad = Integer.parseInt(datos[5].trim());
+
+                    Carta platoDeFondo = new PlatoFondo(precioItem, nombreItem, descripcion, tipoPlatoFondo);
+                    menu.add(platoDeFondo);
+                } catch (NumberFormatException e) {
+                    System.err.println("Error al parsear número en línea: " + linea);
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    System.err.println("Error al procesar línea: " + linea);
+                    e.printStackTrace();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     //Imprimir el menu
@@ -243,3 +305,4 @@ public class Main {
         }
     }
 }
+

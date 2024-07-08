@@ -1,0 +1,6 @@
+codigoItem,precioItem,nombreItem,Alcohol,descripcion,cantidad
+1,5000,Coca-Cola,false,Refresco de cola,50
+2,7000,Pepsi,false,Refresco de cola,40
+3,10000,Heineken,true,Cerveza holandesa,30
+4,15000,Corona,true,Cerveza mexicana,20
+5,12000,Red Bull,false,Bebida energética,60

@@ -3,6 +3,9 @@ public abstract class Carta {
     protected int codigoItem;
     protected int precioItem;
     protected String nombreItem;
+    protected int id;
+    protected int id_siguiente;
+    protected static int counter = 0;
 
     //Getters
     public int getPrecioItem(){ return precioItem; }
@@ -10,13 +13,14 @@ public abstract class Carta {
     public String getNombreItem(){ return nombreItem; }
 
     //Metodos
-    public abstract void ingresarItem();
     public abstract void imprimirItem();
 
     //Constructor
-    public Carta(int codigoItem, int precioItem, String nombreItem){
-        this.codigoItem = codigoItem;
+    public Carta(int precioItem, String nombreItem){
+        this.id = ++counter;
+        this.id_siguiente = id;
         this.precioItem = precioItem;
         this.nombreItem = nombreItem;
+
     }
 }
