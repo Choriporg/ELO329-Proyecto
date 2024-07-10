@@ -41,11 +41,24 @@ Para compilar y ejecutar el proyecto, sigue estos pasos:
 ## Uso
 El programa principal está en `Main.java`, que inicializa y maneja las operaciones del restaurante.
 
+## Makefile
+El proyecto incluye un `Makefile` para automatizar la compilación y ejecución. Para usar el `Makefile`, sigue estos pasos:
+
+1. Compila los archivos Java:
+   ```sh
+   make compile
+   ```
+2. Ejecuta el programa:
+   ```sh
+   make run
+   ```
+3. Limpia los archivos `.class` generados:
+   ```sh
+   make clean
+   ```
+
 ## Integrantes:
 - Vicente Moya 🔰- [@R4skolnikov](https://github.com/r4skolnikov)
 - Nicolas Vergara ⛄- [@Nmauri](https://github.com/Nmaurii)
 - Ignacio González 👾 - [@Choriporg](https://github.com/Choriporg)
 - Eduardo Palma 🗻 - [@Adreoud](https://github.com/adreoud)
-
-## Licencia
-Este proyecto está bajo la Licencia MIT. Para más detalles, revisa el archivo `LICENSE`.
