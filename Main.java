@@ -63,6 +63,7 @@ public class Main {
                         i++;
                     }
                 }
+                
                 numeroMesa++;
                 numeroPedido++;
                 //Verificación si se encontró el mesero
@@ -78,6 +79,10 @@ public class Main {
                 System.out.println("\t\t>> Ingrese el codigo del producto: ");
                 int codigoProducto = inputInteger.nextInt();
 
+                for(int i = 0; i < instancia.mesas.size(); i++){
+                    instancia.mesas.get(i).imprimirMesa();
+                }
+
                 System.out.println("\t\t>> Ingresa la mesa atendida: ");
                 int mesaAtendida = inputInteger.nextInt();
 
@@ -91,6 +96,8 @@ public class Main {
                         i++;
                     }
                 }
+
+                System.out.println("Se encontró el item en la carta?: " + itemEncontrado);
                 //La mesa y el producto existen
                 if(mesaAtendida < instancia.mesas.size() && itemEncontrado){
                     instancia.mesas.get(i).getOrden().agregarItemPedido(instancia.menu.get(i));
@@ -121,14 +128,21 @@ public class Main {
                 }
 
                 System.out.println("Salida while: " + meseroEncontrado + " i: " + i);
-                //El mesero existe
-                if(meseroEncontrado){
-                    Pedido pedidoCompletado = instancia.meseros.get(i).getMesasAtendidas().get(mesaCompletada).getOrden();
-                    instancia.meseros.get(i).actualizarPropinas(pedidoCompletado.getPropinaSugerida());
-                    
-                    //Eliminación de la mesa en la lista del mesero y vaciado de la mesa.
-                    instancia.meseros.get(i).getMesasAtendidas().remove(mesaCompletada);
-                }
+
+                System.out.println("\t\t>> Agregar propina>: (S/N)");
+                String respuesta = inputString.nextLine();
+
+                if(respuesta.equals("S")){
+                    //El mesero existe
+                    if(meseroEncontrado){
+                        Pedido pedidoCompletado = instancia.meseros.get(i).getMesasAtendidas().get(mesaCompletada).getOrden();
+                        instancia.meseros.get(i).actualizarPropinas(pedidoCompletado.getPropinaSugerida());
+                        
+                        //Eliminación de la mesa en la lista del mesero y vaciado de la mesa.
+                        instancia.meseros.get(i).getMesasAtendidas().remove(mesaCompletada);
+                    }
+
+                }               
 
             //Salir
             }else if(accion == 4){
@@ -148,20 +162,10 @@ public class Main {
         meseros = new ArrayList<Mesero>();
         menu = new ArrayList<Carta>();
 
-        System.out.println("\t>> ¿Cuántos meseros trabajan en el restaurante?");
-        int cantidadMeseros = inputInteger.nextInt();
+        //Llenado de meseros
+        leerMeseros("Meseros.csv");
 
-        for(int i = 0; i < cantidadMeseros; i++){
-            System.out.println("\n\t>> Ingrese el nombre del mesero " + (i + 1));
-            String nombreMesero = inputString.nextLine();
-            Mesero mesero = new Mesero(nombreMesero);
-            System.out.println("\n\t>> Ingrese el código del mesero " + nombreMesero + ":");
-            int codigoMesero = inputInteger.nextInt();
-            mesero.setCodigoMesero(codigoMesero);
-            meseros.add(mesero);
-        }
-
-        for(int i = 0; i < cantidadMeseros; i++){
+        for(int i = 0; i < meseros.size(); i++){
             meseros.get(i).imprimirMesero();
         }
 
@@ -169,15 +173,33 @@ public class Main {
         System.out.println("-----------------------------------------");
 
         //Llenado de la carta
-
         leeBebestibles("Bebestibles.csv");
         leeEntradas("Entradas.csv");
         leePlatofondo("Platofondo.csv");
         leerPostre("Postres.csv");
-            
-        System.out.println("-----------------------------------------");
         
         System.out.println("\n\t>> Carta ingresada correctamente");
+    }
+
+    //Leer archivo de configuración de los meseros
+    public void leerMeseros(String archivoCSV){
+        String linea;
+        try(BufferedReader br = new BufferedReader(new FileReader(archivoCSV))){
+            linea = br.readLine();
+
+            while((linea = br.readLine() )!= null){
+                String[] datos = linea.split(",");
+                int id = Integer.parseInt(datos[0]);
+                String nombreMesero = datos[1];
+
+                //Creacion del mesero
+                Mesero nuevoMesero = new Mesero(nombreMesero, id);
+                meseros.add(nuevoMesero);
+            }
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
     }
 
 

@@ -40,8 +40,8 @@ public class Mesero {
     }
 
     //Cosntructor
-    public Mesero(String nombreMesero){
-        codigoMesero = 0;
+    public Mesero(String nombreMesero, int codigooMesero){
+        this.codigoMesero = codigooMesero;
         mesasAtendidas = new ArrayList<Mesa>();
         this.nombreMesero = nombreMesero;
         propinasAcumuladas = 0;
