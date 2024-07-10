@@ -1,22 +1,36 @@
+/**
+ * La clase Mesa representa una mesa en el restaurante.
+ * Cada mesa tiene un número único, un estado de ocupación, y un pedido actual asignado.
+ */
 public class Mesa {
-
-    //Atributos
     private int numeroMesa;
-    private Pedido orden;
+    private boolean ocupada;
+    private Pedido pedidoActual;
 
-    //Getters
-    public int getNumeroMesa() {return numeroMesa;}
-    public Pedido getOrden(){return orden;}
-
-    //Métodos
-
-    public void imprimirMesa(){
-        System.out.println("\n\t\t>> Número de mesa: " + numeroMesa);
+    public Mesa(int numero) {
+        this.numeroMesa = numero;
+        this.ocupada = false;
     }
 
-    //Constructor
-    public Mesa(int numeroMesa, int numeroPedido){
-        this.numeroMesa = numeroMesa;
-        this.orden = new Pedido(numeroPedido);
+    public void asignarPedido(Pedido pedido) {
+        this.pedidoActual = pedido;
+        this.ocupada = true;
+    }
+
+    public Pedido getPedidoActual() {
+        return pedidoActual;
+    }
+
+    public boolean isOcupada() {
+        return ocupada;
+    }
+
+    public int getNumeroMesa() {
+        return numeroMesa;
+    }
+
+    public void liberarMesa() {
+        this.ocupada = false;
+        this.pedidoActual = null;
     }
 }

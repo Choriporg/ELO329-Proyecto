@@ -1,64 +1,44 @@
 import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.List;
 
+/**
+ * La clase Pedido representa un pedido en el restaurante.
+ * Cada pedido contiene una lista de productos pedidos, un subtotal y una propina sugerida.
+ */
 public class Pedido {
-
-    //Atributos
-    private ArrayList<Carta> productosPedidos;
-    private int numeroPedido;
+    private List<Carta> productosPedidos;
     private int subtotal;
     private int propinaSugerida;
 
-    //Métodos
-
-    //Agregar item al pedido
-    public void agregarItemPedido(Carta producto){
-        productosPedidos.add(producto);
-        actualizarSubtotal(); //Actualiza el subtotal
-        actualizarPropinaSugerida();
+    public Pedido() {
+        this.productosPedidos = new ArrayList<>();
+        this.subtotal = 0;
     }
 
-    public void actualizarSubtotal(){
-        subtotal += productosPedidos.get(productosPedidos.size() - 1).getPrecioItem();
-    }
-    //Aplica un descuento a un producto en específico
-    public void aplicarPrecioEspecial(int codigoProducto){
-        //Busqueda del producto
-        for(int i = 0; i < productosPedidos.size(); i++){
-            if(productosPedidos.get(i).getCodigoItem() == codigoProducto){ //Si el producto es encontrado
-                System.out.println(">> ¿Cuál es el descuento que se va a aplicar?");
-                Scanner scn = new Scanner(System.in);
-                //Calculo del descuento
-                int descuento = scn.nextInt();
-                float descuentoPorcentual = (float)descuento / 100;
-                int valorDesconatado = (int)(productosPedidos.get(i).getPrecioItem() * descuentoPorcentual);
-                subtotal -= valorDesconatado; //Aplicación del descuento
-                scn.close();
-                System.out.println("\n\t>> Descuento aplicado correctamente");
-                actualizarPropinaSugerida();
-            } else {
-                System.out.println("\n\t>> Producto no encontrado");
-            }
-        }
+    public void agregarProducto(Carta producto) {
+        this.productosPedidos.add(producto);
+        recalcularSubtotal();
     }
 
-    public void actualizarPropinaSugerida(){
-        propinaSugerida = (int)(subtotal * 0.1);
+    public void eliminarProducto(Carta producto) {
+        this.productosPedidos.remove(producto);
+        recalcularSubtotal();
     }
 
-    //Getters
-    public int getSubtotal(){ return subtotal; }
-    public int getPropinaSugerida(){ return propinaSugerida; }
-    public int getNumeroPedido(){ return numeroPedido; }
-    
-    //Constructor
-
-    //El pedido se crea al momento de crear la mesa
-    public Pedido(int numeroPedido){
-        this.numeroPedido = numeroPedido;
-        productosPedidos = new ArrayList<Carta>();
-        subtotal = 0;
-        propinaSugerida = 0;
+    private void recalcularSubtotal() {
+        subtotal = productosPedidos.stream().mapToInt(Carta::getPrecioItem).sum();
+        propinaSugerida = (int) (subtotal * 0.1);
     }
 
+    public int getSubtotal() {
+        return subtotal;
+    }
+
+    public int getPropinaSugerida() {
+        return propinaSugerida;
+    }
+
+    public List<Carta> getProductosPedidos() {
+        return productosPedidos;
+    }
 }

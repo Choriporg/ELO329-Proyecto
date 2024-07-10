@@ -1,330 +1,274 @@
-import java.util.Scanner;
-import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
-    public static Scanner inputInteger;
-    public static Scanner inputString;
-    private ArrayList<Mesero> meseros;
-    private ArrayList<Mesa> mesas;
-    private ArrayList<Carta> menu;
-    public static void main(String[] args){
-        //Inicialización de la aplicación
+    private static List<Mesero> meseros;
+    private static List<Mesa> mesas;
+    private static List<Carta> menu;
 
-        //Scanner para ingreso de datos
-        //Hay dos, para evitar problemas al leer datos de diferentes tipos
-        inputInteger = new Scanner(System.in);
-        inputString = new Scanner(System.in);
+    public static void main(String[] args) {
+        inicializarSistema();
+        mostrarMenuPrincipal();
+    }
 
-        //Creación de una instancia de ejecución de la aplicación.
-        Main instancia = new Main();
-        instancia.mesas = new ArrayList<Mesa>();
+    private static void inicializarSistema() {
+        meseros = new ArrayList<>();
+        mesas = new ArrayList<>();
+        menu = new ArrayList<>();
 
-        System.out.println("-----------------------------------------");
-        System.out.println(">> Bienvenido a la aplicación de pedidos");
-        System.out.println("-----------------------------------------");
-        System.out.println(">> Iniciando configuraciones iniciales:");
-        instancia.Inicialización();
-        System.out.println("\n>> Configuración inicial exitosa");
+        cargarMeserosDesdeArchivo("meseros.csv");
+        for (int i = 1; i <= 10; i++) {
+            mesas.add(new Mesa(i));
+        }
+        cargarMenuDesdeArchivo("Bebestibles.csv", "Entradas.csv", "Platofondo.csv", "Postres.csv");
+    }
 
-        //Menu de interaccion con el usuario
+    private static void cargarMeserosDesdeArchivo(String archivo) {
+        try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                String[] datos = linea.split(",");
+                String nombre = datos[0];
+                int codigo = Integer.parseInt(datos[1]);
+                meseros.add(new Mesero(nombre, codigo));
+            }
+        } catch (IOException e) {
+            System.out.println("Error al leer el archivo de meseros: " + e.getMessage());
+        }
+    }
 
+    private static void cargarMenuDesdeArchivo(String archivoBebestibles, String archivoEntradas, String archivoPlatoFondo, String archivoPostres) {
+        cargarBebestibles(archivoBebestibles);
+        cargarEntradas(archivoEntradas);
+        cargarPlatoFondo(archivoPlatoFondo);
+        cargarPostres(archivoPostres);
+    }
+
+    private static void cargarBebestibles(String archivo) {
+        try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                String[] datos = linea.split(",");
+                String nombre = datos[0];
+                int precio = Integer.parseInt(datos[1]);
+                boolean tieneAlcohol = Boolean.parseBoolean(datos[2]);
+                menu.add(new Bebestibles(nombre, precio, tieneAlcohol));
+            }
+        } catch (IOException e) {
+            System.out.println("Error al leer el archivo de bebestibles: " + e.getMessage());
+        }
+    }
+
+    private static void cargarEntradas(String archivo) {
+        try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                String[] datos = linea.split(",");
+                String nombre = datos[0];
+                int precio = Integer.parseInt(datos[1]);
+                String tipoEntrada = datos[2];
+                boolean aptoVegetarianos = Boolean.parseBoolean(datos[3]);
+                menu.add(new Entradas(nombre, precio, tipoEntrada, aptoVegetarianos));
+            }
+        } catch (IOException e) {
+            System.out.println("Error al leer el archivo de entradas: " + e.getMessage());
+        }
+    }
+
+    private static void cargarPlatoFondo(String archivo) {
+        try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                String[] datos = linea.split(",");
+                String nombre = datos[0];
+                int precio = Integer.parseInt(datos[1]);
+                String tipoPlatoFondo = datos[2];
+                menu.add(new PlatoFondo(nombre, precio, tipoPlatoFondo));
+            }
+        } catch (IOException e) {
+            System.out.println("Error al leer el archivo de platos de fondo: " + e.getMessage());
+        }
+    }
+
+    private static void cargarPostres(String archivo) {
+        try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                String[] datos = linea.split(",");
+                String nombre = datos[0];
+                int precio = Integer.parseInt(datos[1]);
+                String tipoPostre = datos[2];
+                menu.add(new Postres(nombre, precio, tipoPostre));
+            }
+        } catch (IOException e) {
+            System.out.println("Error al leer el archivo de postres: " + e.getMessage());
+        }
+    }
+
+    private static void mostrarMenuPrincipal() {
+        Scanner scanner = new Scanner(System.in);
         boolean continuar = true;
-        int numeroMesa = 1;
-        int numeroPedido = 0;
 
-        while(continuar){
-            System.out.println("-----------------------------------------");
-            System.out.println("\n>> Seleccione una opción:");
-            System.out.println("\t\t>> (1) Ingresar mesa");
-            System.out.println("\t\t>> (2) Ingresar Pedido");
-            System.out.println("\t\t>> (3) Completar Pedido");
-            System.out.println("\t\t>> (4) Salir");
+        while (continuar) {
+            System.out.println("\n=== Sistema de Gestión de Pedidos ===");
+            System.out.println("Seleccione una opción:");
+            System.out.println("1. Seleccionar mesa");
+            System.out.println("2. Ingresar pedido");
+            System.out.println("3. Mostrar mesas ocupadas");
+            System.out.println("4. Mostrar mesas desocupadas");
+            System.out.println("5. Generar boleta y liberar mesa");
+            System.out.println("6. Salir");
+            System.out.print("Opción: ");
+            int opcion = scanner.nextInt();
 
-            int accion = inputInteger.nextInt();
-            
-            //Caso en el que se selecciona ingresar una mesa.
-            if(accion == 1){
-                Mesa nuevaMesa = new Mesa(numeroMesa, numeroPedido);
-                instancia.mesas.add(nuevaMesa);
-                
-                System.out.println("\t\t>> Codigo del mesero: ");
-                int codigoIngresado = inputInteger.nextInt();
+            switch (opcion) {
+                case 1:
+                    seleccionarMesa(scanner);
+                    break;
+                case 2:
+                    ingresarPedido(scanner);
+                    break;
+                case 3:
+                    mostrarMesasOcupadas();
+                    break;
+                case 4:
+                    mostrarMesasDesocupadas();
+                    break;
+                case 5:
+                    generarBoleta(scanner);
+                    break;
+                case 6:
+                    continuar = false;
+                    break;
+                default:
+                    System.out.println("Opción inválida, por favor intente nuevamente.");
+            }
+        }
+        scanner.close();
+    }
 
-                int i = 0;
-                boolean meseroEncontrado = false;
-                //Obtener el mesero que está atendiendo la mesa
-                while(i < instancia.meseros.size() && meseroEncontrado == false){
-                    if(instancia.meseros.get(i).getCodigoMesero() == codigoIngresado){
-                        meseroEncontrado = true;
-                    }else{
-                        i++;
+    private static void seleccionarMesa(Scanner scanner) {
+        System.out.println("\n=== Selección de Mesa ===");
+        System.out.println("Seleccione el número de mesa disponible:");
+        for (Mesa mesa : mesas) {
+            if (!mesa.isOcupada()) {
+                System.out.println("Mesa " + mesa.getNumeroMesa());
+            }
+        }
+        System.out.print("Número de mesa: ");
+        int numeroMesa = scanner.nextInt();
+        try {
+            Mesa mesaSeleccionada = mesas.get(numeroMesa - 1);
+            if (!mesaSeleccionada.isOcupada()) {
+                System.out.println("Mesa " + numeroMesa + " seleccionada.");
+                mesaSeleccionada.asignarPedido(new Pedido()); // Marcando la mesa como ocupada
+            } else {
+                System.out.println("Mesa no disponible.");
+            }
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Número de mesa inválido. Por favor, intente nuevamente.");
+        }
+    }
+
+    private static void ingresarPedido(Scanner scanner) {
+        System.out.println("\n=== Ingreso de Pedido ===");
+        System.out.print("Ingrese el número de mesa: ");
+        int numeroMesa = scanner.nextInt();
+        try {
+            Mesa mesaSeleccionada = mesas.get(numeroMesa - 1);
+            if (mesaSeleccionada.isOcupada()) {
+                Pedido pedido = mesaSeleccionada.getPedidoActual();
+                boolean agregarProductos = true;
+                while (agregarProductos) {
+                    System.out.println("Seleccione un producto del menú:");
+                    for (int i = 0; i < menu.size(); i++) {
+                        System.out.println((i + 1) + ". " + menu.get(i).getNombreItem() + " - $" + menu.get(i).getPrecioItem());
                     }
-                }
-                
-                numeroMesa++;
-                numeroPedido++;
-                //Verificación si se encontró el mesero
-                if(meseroEncontrado == false){
-                    System.out.println(">> No se encontró al mesero ingresado, ingrese un codigo válido.");
-                }else{
-                    instancia.meseros.get(i).ingresarMesa(nuevaMesa);
-                }
-            //Caso en el que ingresan productos al pedido
-            }else if (accion == 2){
-                instancia.mostrarMenu();
-
-                System.out.println("\t\t>> Ingrese el codigo del producto: ");
-                int codigoProducto = inputInteger.nextInt();
-
-                for(int i = 0; i < instancia.mesas.size(); i++){
-                    instancia.mesas.get(i).imprimirMesa();
-                }
-
-                System.out.println("\t\t>> Ingresa la mesa atendida: ");
-                int mesaAtendida = inputInteger.nextInt();
-
-                //Buscar item en la carta
-                int i = 0;
-                boolean itemEncontrado = false;
-                while(i < instancia.menu.size() && itemEncontrado == false){
-                    if(instancia.menu.get(i).getCodigoItem() == codigoProducto){
-                        itemEncontrado = true;
-                    }else{
-                        i++;
+                    System.out.print("Número del producto: ");
+                    int productoIndex = scanner.nextInt() - 1;
+                    if (productoIndex >= 0 && productoIndex < menu.size()) {
+                        pedido.agregarProducto(menu.get(productoIndex));
+                        System.out.println("Producto agregado.");
+                    } else {
+                        System.out.println("Producto inválido.");
                     }
+                    agregarProductos = preguntarSiAgregarOtroProducto(scanner);
                 }
+                System.out.println("Pedido registrado. Subtotal: $" + pedido.getSubtotal() + " Propina sugerida: $" + pedido.getPropinaSugerida());
+            } else {
+                System.out.println("Mesa no disponible o no seleccionada.");
+            }
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Número de mesa inválido. Por favor, intente nuevamente.");
+        }
+    }
 
-                System.out.println("Se encontró el item en la carta?: " + itemEncontrado);
-                //La mesa y el producto existen
-                if(mesaAtendida < instancia.mesas.size() && itemEncontrado){
-                    instancia.mesas.get(i).getOrden().agregarItemPedido(instancia.menu.get(i));
-                }
+    private static boolean preguntarSiAgregarOtroProducto(Scanner scanner) {
+        while (true) {
+            System.out.print("¿Desea agregar otro producto? (1: Sí, 2: No): ");
+            String respuesta = scanner.next();
+            if (respuesta.equalsIgnoreCase("1") || respuesta.equalsIgnoreCase("Sí") || respuesta.equalsIgnoreCase("Si")) {
+                return true;
+            } else if (respuesta.equalsIgnoreCase("2") || respuesta.equalsIgnoreCase("No")) {
+                return false;
+            } else {
+                System.out.println("Entrada inválida. Por favor, ingrese '1' para Sí o '2' para No.");
+            }
+        }
+    }
 
-            //Completar pedido
-            } else if(accion == 3){
-                System.out.println("------------------------------------");
-                for(int index = 0; index < instancia.meseros.size(); index++){
-                    instancia.meseros.get(index).imprimirMesero();
-                    instancia.meseros.get(index).imprimirMesasAtendidas();
-                }
-                System.out.println(">> Ingrese codigo de mesero: ");
-                int codMesero = inputInteger.nextInt();
+    private static void mostrarMesasOcupadas() {
+        System.out.println("\n=== Mesas Ocupadas ===");
+        for (Mesa mesa : mesas) {
+            if (mesa.isOcupada()) {
+                System.out.println("Mesa " + mesa.getNumeroMesa());
+            }
+        }
+    }
 
-                System.out.println(">> Ingrese la mesa que se está cerrando: ");
-                int mesaCompletada = inputInteger.nextInt();
-                
-                //Busqueda mesero
-                int i = 0;
-                boolean meseroEncontrado = false;
-                while(i < instancia.meseros.size() && meseroEncontrado == false){
-                    if(instancia.meseros.get(i).getCodigoMesero() == codMesero){
-                        meseroEncontrado = true;
-                    }else{
-                        i++;
+    private static void mostrarMesasDesocupadas() {
+        System.out.println("\n=== Mesas Desocupadas ===");
+        for (Mesa mesa : mesas) {
+            if (!mesa.isOcupada()) {
+                System.out.println("Mesa " + mesa.getNumeroMesa());
+            }
+        }
+    }
+
+    private static void generarBoleta(Scanner scanner) {
+        System.out.println("\n=== Generación de Boleta ===");
+        System.out.print("Ingrese el número de mesa para generar la boleta: ");
+        int numeroMesa = scanner.nextInt();
+        try {
+            Mesa mesaSeleccionada = mesas.get(numeroMesa - 1);
+            if (mesaSeleccionada.isOcupada()) {
+                Pedido pedido = mesaSeleccionada.getPedidoActual();
+                try (FileWriter writer = new FileWriter("boleta_mesa_" + numeroMesa + ".txt")) {
+                    writer.write("Boleta para Mesa " + numeroMesa + "\n");
+                    writer.write("=====================\n");
+                    for (Carta producto : pedido.getProductosPedidos()) {
+                        writer.write(producto.getNombreItem() + " - $" + producto.getPrecioItem() + "\n");
                     }
+                    writer.write("=====================\n");
+                    writer.write("Subtotal: $" + pedido.getSubtotal() + "\n");
+                    writer.write("Propina Sugerida: $" + pedido.getPropinaSugerida() + "\n");
+                } catch (IOException e) {
+                    System.out.println("Error al generar la boleta: " + e.getMessage());
                 }
-
-                System.out.println("Salida while: " + meseroEncontrado + " i: " + i);
-
-                System.out.println("\t\t>> Agregar propina>: (S/N)");
-                String respuesta = inputString.nextLine();
-
-                if(respuesta.equals("S")){
-                    //El mesero existe
-                    if(meseroEncontrado){
-                        Pedido pedidoCompletado = instancia.meseros.get(i).getMesasAtendidas().get(mesaCompletada).getOrden();
-                        instancia.meseros.get(i).actualizarPropinas(pedidoCompletado.getPropinaSugerida());
-                        
-                        //Eliminación de la mesa en la lista del mesero y vaciado de la mesa.
-                        instancia.meseros.get(i).getMesasAtendidas().remove(mesaCompletada);
-                    }
-
-                }               
-
-            //Salir
-            }else if(accion == 4){
-                for(int i = 0; i < instancia.meseros.size(); i++){
-                    instancia.meseros.get(i).imprimirMesero();
-                }
-
-                continuar = false;
+                mesaSeleccionada.liberarMesa();
+                System.out.println("Boleta generada y mesa liberada.");
+            } else {
+                System.out.println("Mesa no disponible o no seleccionada.");
             }
-        
-        }
-    }
-    //Inicia la ejecución de la instancia de ejecución creando el arreglo de los meseros y la carta.
-    public void Inicialización(){
-        inputInteger = new Scanner(System.in);
-        inputString = new Scanner(System.in);
-        meseros = new ArrayList<Mesero>();
-        menu = new ArrayList<Carta>();
-
-        //Llenado de meseros
-        leerMeseros("Meseros.csv");
-
-        for(int i = 0; i < meseros.size(); i++){
-            meseros.get(i).imprimirMesero();
-        }
-
-        System.out.println("\n\t>> Meseros ingresados correctamente");
-        System.out.println("-----------------------------------------");
-
-        //Llenado de la carta
-        leeBebestibles("Bebestibles.csv");
-        leeEntradas("Entradas.csv");
-        leePlatofondo("Platofondo.csv");
-        leerPostre("Postres.csv");
-        
-        System.out.println("\n\t>> Carta ingresada correctamente");
-    }
-
-    //Leer archivo de configuración de los meseros
-    public void leerMeseros(String archivoCSV){
-        String linea;
-        try(BufferedReader br = new BufferedReader(new FileReader(archivoCSV))){
-            linea = br.readLine();
-
-            while((linea = br.readLine() )!= null){
-                String[] datos = linea.split(",");
-                int id = Integer.parseInt(datos[0]);
-                String nombreMesero = datos[1];
-
-                //Creacion del mesero
-                Mesero nuevoMesero = new Mesero(nombreMesero, id);
-                meseros.add(nuevoMesero);
-            }
-        } catch (IOException e){
-            e.printStackTrace();
-        }
-
-    }
-
-
-    //Leer archivo de configuracion bebestibles
-    public void leeBebestibles(String archivoCSV) {
-        String linea;
-        try (BufferedReader br = new BufferedReader(new FileReader(archivoCSV))) {
-            // Leer la primera línea (cabecera)
-            linea = br.readLine();
-
-            // Leer el resto del archivo
-            while ((linea = br.readLine()) != null) {
-                String[] datos = linea.split(",");
-                int precioItem = Integer.parseInt(datos[1]);
-                String nombreItem = datos[2];
-                boolean tieneAlcohol = Boolean.parseBoolean(datos[3]);
-                String descripcion = datos[4];
-
-                // Crear un objeto Bebestibles y agregarlo al menu
-                Carta bebestible = new Bebestibles(precioItem, nombreItem, tieneAlcohol, descripcion);
-                menu.add(bebestible);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    //Leer archivo de configuracion postres
-    public void leerPostre(String archivoCSV) {
-        String linea;
-        try (BufferedReader br = new BufferedReader(new FileReader(archivoCSV))) {
-            // Leer la primera línea (cabecera)
-            linea = br.readLine();
-
-            // Leer el resto del archivo
-            while ((linea = br.readLine()) != null) {
-                String[] datos = linea.split(",");
-                int precioItem = Integer.parseInt(datos[1]);
-                String nombreItem = datos[2];
-                String tipoPostre = datos[3];
-                String descripcion = datos[4];
-
-                // Crear un objeto Postre y agregarlo al menu
-                Carta postre = new Postres(precioItem, nombreItem, tipoPostre, descripcion);
-                menu.add(postre);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    //Leer archivo de configuracion entradas
-    public void leeEntradas(String archivoCSV) {
-        String linea;
-        try (BufferedReader br = new BufferedReader(new FileReader(archivoCSV))) {
-            linea = br.readLine(); // Leer la primera línea (cabecera)
-
-            while ((linea = br.readLine()) != null) {
-                String[] datos = linea.split(",");
-                int codigoItem = Integer.parseInt(datos[0]);
-                int precioItem = Integer.parseInt(datos[1]);
-                String nombreItem = datos[2];
-                String tipoEntrada = datos[3];
-                boolean aptoVegetarianos = Boolean.parseBoolean(datos[4]);
-
-
-                Carta entrada = new Entradas(precioItem, nombreItem, tipoEntrada, aptoVegetarianos);
-                menu.add(entrada);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    //Leer archivo de configuracion platos de fondo
-    public void leePlatofondo(String archivoCSV) {
-        String linea;
-        try (BufferedReader br = new BufferedReader(new FileReader(archivoCSV))) {
-            linea = br.readLine(); // Leer la primera línea (cabecera)
-
-            // Leer el resto del archivo
-            while ((linea = br.readLine()) != null) {
-                // Ignorar líneas vacías
-                if (linea.trim().isEmpty()) {
-                    continue;
-                }
-
-                String[] datos = linea.split(",");
-                if (datos.length < 6) {
-                    // Si faltan columnas, continuar con la siguiente línea
-                    System.err.println("Línea ignorada por falta de datos: " + linea);
-                    continue;
-                }
-
-                try {
-                    int codigoItem = Integer.parseInt(datos[0].trim());
-                    int precioItem = Integer.parseInt(datos[1].trim());
-                    String nombreItem = datos[2].trim();
-                    String descripcion = datos[3].trim();
-                    String tipoPlatoFondo = datos[4].trim();
-                    int cantidad = Integer.parseInt(datos[5].trim());
-
-                    Carta platoDeFondo = new PlatoFondo(precioItem, nombreItem, descripcion, tipoPlatoFondo);
-                    menu.add(platoDeFondo);
-                } catch (NumberFormatException e) {
-                    System.err.println("Error al parsear número en línea: " + linea);
-                    e.printStackTrace();
-                } catch (Exception e) {
-                    System.err.println("Error al procesar línea: " + linea);
-                    e.printStackTrace();
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    //Imprimir el menu
-    public void mostrarMenu(){
-        System.out.println("\n\t>> Mostrando la carta.");
-        for(int i = 0; i < menu.size(); i ++){
-            System.out.println("-----------------------------------------");
-            menu.get(i).imprimirItem();
-            System.out.println("-----------------------------------------");
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Número de mesa inválido. Por favor, intente nuevamente.");
         }
     }
 }
+
 

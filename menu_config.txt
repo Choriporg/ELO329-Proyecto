@@ -1,0 +1,4 @@
+Bebestible,Coca Cola,1000,true
+Entrada,Ensalada,5000,Vegetariana,true
+PlatoFondo,Lomo a lo pobre,8000,Carnes
+Postre,Torta de chocolate,3000,Dulce

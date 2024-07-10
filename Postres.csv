@@ -1,6 +1,2 @@
-codigoItem,precioItem,nombreItem,tipoPostre,descripcion,cantidad
-1,5000,Cheesecake,Pastel,Delicioso cheesecake de fresa,20
-2,3000,Brownie,Pastel,Exquisito brownie de chocolate,15
-3,2500,Flan,Flan,Suave flan de vainilla,30
-4,4000,Tiramisu,Pastel,Tiramisu clásico italiano,10
-5,4500,Panna Cotta,Flan,Crema cocida con frutos rojos,25
+Torta de chocolate,3000,Dulce
+Helado,2000,Dulce

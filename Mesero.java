@@ -1,50 +1,45 @@
 import java.util.ArrayList;
+import java.util.List;
 
+/**
+ * La clase Mesero representa a un mesero del restaurante.
+ * Cada mesero tiene un nombre, un código único, la cantidad de propinas acumuladas,
+ * y una lista de mesas que está atendiendo.
+ */
 public class Mesero {
-    //Atributos
     private String nombreMesero;
     private int propinasAcumuladas;
     private int codigoMesero;
-    private ArrayList<Mesa> mesasAtendidas;
+    private List<Mesa> mesasAtendidas;
 
-    //Metodos
-
-    public void ingresarMesa(Mesa mesaNueva){
-        mesasAtendidas.add(mesaNueva);
+    public Mesero(String nombre, int codigo) {
+        this.nombreMesero = nombre;
+        this.codigoMesero = codigo;
+        this.propinasAcumuladas = 0;
+        this.mesasAtendidas = new ArrayList<>();
     }
 
-    public void actualizarPropinas(int propinaGanada){
-        propinasAcumuladas += propinaGanada;
+    public void actualizarPropinas(int propina) {
+        this.propinasAcumuladas += propina;
     }
 
-    public void imprimirMesero(){
-        System.out.println("\n\t\t>> Nombre del mesero: " + nombreMesero + "; Codigo del mesero: " + codigoMesero + "; Propinas acumuladas: " + propinasAcumuladas);
+    public void asignarMesa(Mesa mesa) {
+        this.mesasAtendidas.add(mesa);
     }
 
-    public void imprimirMesasAtendidas(){
-        for(int i = 0; i < mesasAtendidas.size(); i++){
-            System.out.println("------------------------------");
-            System.err.println("Número de mesa: " + mesasAtendidas.get(i).getNumeroMesa());
-        }
+    public List<Mesa> getMesasAtendidas() {
+        return mesasAtendidas;
     }
 
-    //Getters
-    public int getCodigoMesero(){ return codigoMesero;}
-    public int getPropinasAcumuladas(){ return propinasAcumuladas;}
-    public ArrayList<Mesa> getMesasAtendidas(){return mesasAtendidas;}
-    public String getNombreMesero(){ return nombreMesero;}
-
-    //Setters
-    public void setCodigoMesero(int codigo){
-        codigoMesero = codigo;
+    public String getNombreMesero() {
+        return nombreMesero;
     }
 
-    //Cosntructor
-    public Mesero(String nombreMesero, int codigooMesero){
-        this.codigoMesero = codigooMesero;
-        mesasAtendidas = new ArrayList<Mesa>();
-        this.nombreMesero = nombreMesero;
-        propinasAcumuladas = 0;
+    public int getPropinasAcumuladas() {
+        return propinasAcumuladas;
     }
 
+    public int getCodigoMesero() {
+        return codigoMesero;
+    }
 }
