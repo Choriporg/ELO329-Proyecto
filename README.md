@@ -31,7 +31,7 @@ Para compilar y ejecutar el proyecto, sigue estos pasos:
 1. Abre una terminal y navega al directorio donde se encuentran los archivos `.java`.
 2. Compila los archivos Java utilizando el comando:
    ```sh
-   javac *.java
+   javac Main.java Mesero.java Mesa.java Pedido.java Carta.java Bebestibles.java Entradas.java PlatoFondo.java Postres.java
    ```
 3. Una vez compilados, ejecuta el programa con el siguiente comando:
    ```sh
